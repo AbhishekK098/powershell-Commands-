@@ -1,0 +1,119 @@
+ipconfig                            - “to get ip details”
+Systemconfig/all                     - “to get system configuration “
+Get-ComputerInfo                     - (“get full info about system)
+Systeminfo)”get is details”)
+Get-Winobject Win32_Computer         - to get processor details
+Get-Winobject Win32_BIOS
+—————————
+—————————
+"To get storage/ Drive info"
+Get-PSDrive (“file system all files”)          
+Get-Volume (“volume details”)
+Get-PhysicalDisk(“physical disk”)
+Get-Disk(“disk info”)
+Get-Partition(“partition”)
+————————————
+Login/ security logs( Run power shell as admin)
+Get-WinEvent -LogName Security | Where -Object {$_.Id - in 4624, 4625, 4634} (4624- successfully login, 4625- failed login, 4634- log off)
+Get-EventLog -LogName Security -Newest 10 (“last 10 security logs”)                  -To Check last 10 days login activities
+”
+[Environment]::GetFolderPath(“Desktop”)                   - to get current users desktop
+[Environme]::GetFolderPath(“MyDocuments”)                 - document folder
+ ————————————
+Get-ChildItem c:\Users -Recurse (“list files/ folders”)
+Get-Item C:\path\file.txt (“ file properties “)
+Get-Acl C:\path\file.txt )” file permissions “)
+——————————
+Process & services
+GET-Process (“Running process”)
+Get-Service (“ services”)
+Get-Service | Where-Object {$_.Status -eq “Running”} (“only running services”)
+Stop-Process -Name notepad -Force (“kill process”)
+———————————
+Get -WinOnject win32_Product (“installed software “)
+Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CoverntVersion\Unistall\*|Select DisplayName, DisplayVersion, Publisher, InstallDate
+——————————————
+NETWORK INFORMATION COMM
+
+Get-NetIpAddress (“ip configuration “)                    -To get network Ip details 
+Get-NetIpConfiguration(“ network adapter “)               -To get network adapter details
+Get-NetTCPConnection (@ active TCP Connections”)          -shows all TCP connection of system to network
+Get-NetAdapter (“network Interfaces”)                      -shows all network interfaces (Wi-Fi, Ethernet, etc.).
+Get-DnsClientServerAddress (“DNS servers”)                  -shows the DNS servers your system is using.
+Test-Connection url (“ping test”)                           -To check ping 
+—————————————-
+FILE OPERATION COMMANDS
+
+ Get-Location (“ show current directory “)
+Get-ChildItem (“list files”) or ls 
+Cd foldername (“ change directory “)
+Cd.. (“ go back 1 step back”)
+New-Item -ItemType Directory-Name foldername (“make new directory “)
+Remove -Item -ItemType File -Name filename.txt
+————————————
+File operations
+New-Item -Item Type File -Name filename.txt.  (“Create a new text file”)
+Add-Content  filename.txt “add content” (“write content to file”)
+Get-Content filename.txt (“view file content”)
+Copy -Item filename.txt new filename.txt (“copy file into new file”)
+Move-Item filename.txt folder\ (“move file from 1 folder to other”)
+Remove -Item filename.txt (“Remove file”)
+————————————————-
+USER & PERMISSIONS COMMANDS
+whoami (“ show current user”)
+Get-LocalUser (“ list all users”)
+net user username newpassword (“ change password”)
+icacls file.txt/grant User:F (“change file permission “)
+takeown /f filename.txt (“ change file owner”)
+———————————
+Change laptop password using ps commands
+
+Set-LocalUser -Name "YourUserName" -Password (Read-Host -AsSecureString "Enter New Password") (“change a Windows user account password (often referred to as the “laptop password”) 
+
+Set-LocalUser -Name "TargetUserName" -Password (ConvertTo-SecureString "NewPasswordHere" -AsPlainText -Force) (“For Another Local User If you’re an administrator and want to reset another account’s password:”)
+———————————————-
+
+SYSTEM INFO &PROCESS COMMANDS
+Get-Date (“show date & time “)
+Systeminfo (“system info”)
+Get-WmiObject win32_Processor (“cpu info”)
+Get-Process (“CPU info”)
+Get-Process(“Disk usage, memory info”)
+Stop-Process -Id PID (“kill process”)
+
+————————————————
+Create a hidden file
+New-Item -Path C:\Temp\secret.txt -ItemType File -Force
+Set-Content -Path C:\Temp\secret.txt -Value "Top secret content"
+(Get-Item C:\Temp\secret.txt).Attributes += 'Hidden'
+————-
+
+echo Top secret content> C:\Temp\secret.txt
+attrib +h C:\Temp\secret.txt
+(“Write text and set Hidden attribute: ”)
+——————-
+New-Item -Path C:\Temp\HiddenFolder -ItemType Directory
+(Get-Item C:\Temp\HiddenFolder).Attributes = 'Hidden'
+(“Make a hidden folder (PowerShell”)
+
+———————————-
+TO CREAT A HIDDEN FILE / ADD CONTENT TO FILE / SEE CONTENT IN FILE / REMOVE HIDDEN FILE
+1-Create an file
+                                    New-Item -Path “url\filename.txt”
+
+2-To create a file and need location of folder
+                                                [Environment]::GetFolderPath("Desktop")     -This is to filnd desktop folder you can change Desktop into your required folder name
+
+2-Hide created file
+                                    Set-ItemProperty -Path “url\filename.txt” -Name Attribute -Value Hidden
+3-Add content to hidden file 
+                                    Add-Content -Path “url\filename.txt” -Value “add text content you want in the hidden file” 
+
+4- see for hidden file
+                                    Get-ChildItem -Path “url\filename.txt” -Force  Where-Object { $_.Attributes -math “Hidden”}
+
+5- look content inside the file
+                                    Get-Content -Path “url\filename.txt“
+
+6-REMOVE OR DELETE FILE
+                                    Remove -Item -Path “C:\Users\lapto\OneDrive\Desktop\filename.txt”
