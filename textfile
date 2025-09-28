@@ -7,11 +7,11 @@ Get-Winobject Win32_BIOS
 —————————
 —————————
 "To get storage/ Drive info"
-Get-PSDrive (“file system all files”)          
-Get-Volume (“volume details”)
-Get-PhysicalDisk(“physical disk”)
-Get-Disk(“disk info”)
-Get-Partition(“partition”)
+Get-PSDrive                                      (“file system all files”)          
+Get-Volume                                           (“volume details”)
+Get-PhysicalDisk                                   (“physical disk”)
+Get-Disk                                            (“disk info”)
+Get-Partition                                     (“partition”)
 ————————————
 Login/ security logs( Run power shell as admin)
 Get-WinEvent -LogName Security | Where -Object {$_.Id - in 4624, 4625, 4634} (4624- successfully login, 4625- failed login, 4634- log off)
@@ -20,17 +20,17 @@ Get-EventLog -LogName Security -Newest 10 (“last 10 security logs”)         
 [Environment]::GetFolderPath(“Desktop”)                   - to get current users desktop
 [Environme]::GetFolderPath(“MyDocuments”)                 - document folder
  ————————————
-Get-ChildItem c:\Users -Recurse (“list files/ folders”)
-Get-Item C:\path\file.txt (“ file properties “)
-Get-Acl C:\path\file.txt )” file permissions “)
+Get-ChildItem c:\Users -Recurse                                 (“list files/ folders”)
+Get-Item C:\path\file.txt                                            (“ file properties “)
+Get-Acl C:\path\file.txt                                    (” file permissions “)
 ——————————
-Process & services
-GET-Process (“Running process”)
-Get-Service (“ services”)
-Get-Service | Where-Object {$_.Status -eq “Running”} (“only running services”)
-Stop-Process -Name notepad -Force (“kill process”)
+Process & services        
+GET-Process                                                   (“Running process”)
+Get-Service                                                     (“ services”)
+Get-Service | Where-Object {$_.Status -eq “Running”}            (“only running services”)
+Stop-Process -Name notepad -Force                                    (“kill process”)
 ———————————
-Get -WinOnject win32_Product (“installed software “)
+Get -WinOnject win32_Product                                  (“installed software “)
 Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CoverntVersion\Unistall\*|Select DisplayName, DisplayVersion, Publisher, InstallDate
 ——————————————
 NETWORK INFORMATION COMM
@@ -44,20 +44,22 @@ Test-Connection url (“ping test”)                           -To check ping
 —————————————-
 FILE OPERATION COMMANDS
 
- Get-Location (“ show current directory “)
-Get-ChildItem (“list files”) or ls 
-Cd foldername (“ change directory “)
-Cd.. (“ go back 1 step back”)
-New-Item -ItemType Directory-Name foldername (“make new directory “)
+ Get-Location                                                   (“ show current directory “)
+Get-ChildItem                                               (“list files”) or ls 
+Cd foldername                                                       (“ change directory “)
+Cd..                                                      (“ go back 1 step back”)
+New-Item -ItemType Directory-Name foldername                   (“make new directory “)
 Remove -Item -ItemType File -Name filename.txt
 ————————————
 File operations
-New-Item -Item Type File -Name filename.txt.  (“Create a new text file”)
-Add-Content  filename.txt “add content” (“write content to file”)
-Get-Content filename.txt (“view file content”)
-Copy -Item filename.txt new filename.txt (“copy file into new file”)
-Move-Item filename.txt folder\ (“move file from 1 folder to other”)
-Remove -Item filename.txt (“Remove file”)
+[Environment]::GetFolderPath("Desktop")                      (" Current user's Desktop")
+[Environment]::GetFolderPath("MyDocuments")                   (" Documents folder")
+New-Item -Item Type File -Name filename.txt                               (“Create a new text file”)
+Add-Content  filename.txt “add content”                                   (“write content to file”)
+Get-Content filename.txt                                                        (“view file content”)
+Copy -Item filename.txt new filename.txt                                    (“copy file into new file”)
+Move-Item filename.txt folder\                                               (“move file from 1 folder to other”)
+Remove -Item filename.txt                                                         (“Remove file”)
 ————————————————-
 USER & PERMISSIONS COMMANDS
 whoami (“ show current user”)
@@ -74,12 +76,12 @@ Set-LocalUser -Name "TargetUserName" -Password (ConvertTo-SecureString "NewPassw
 ———————————————-
 
 SYSTEM INFO &PROCESS COMMANDS
-Get-Date (“show date & time “)
-Systeminfo (“system info”)
-Get-WmiObject win32_Processor (“cpu info”)
-Get-Process (“CPU info”)
-Get-Process(“Disk usage, memory info”)
-Stop-Process -Id PID (“kill process”)
+Get-Date                                                 (“show date & time “)
+Systeminfo                                                 (“system info”)
+Get-WmiObject win32_Processor                               (“cpu info”)
+Get-Process                                                  (“CPU info”)
+Get-Process                                              (“Disk usage, memory info”)
+Stop-Process -Id PID                                           (“kill process”)
 
 ————————————————
 Create a hidden file
@@ -94,9 +96,10 @@ attrib +h C:\Temp\secret.txt
 ——————-
 New-Item -Path C:\Temp\HiddenFolder -ItemType Directory
 (Get-Item C:\Temp\HiddenFolder).Attributes = 'Hidden'
-(“Make a hidden folder (PowerShell”)
+
 
 ———————————-
+(“Make a hidden folder  using PowerShell commands and add content(text) init, read that content, remove hidden file.
 TO CREAT A HIDDEN FILE / ADD CONTENT TO FILE / SEE CONTENT IN FILE / REMOVE HIDDEN FILE
 1-Create an file
                                     New-Item -Path “url\filename.txt”
@@ -117,3 +120,41 @@ TO CREAT A HIDDEN FILE / ADD CONTENT TO FILE / SEE CONTENT IN FILE / REMOVE HIDD
 
 7-REMOVE OR DELETE FILE
                                     Remove -Item -Path “C:\Users\lapto\OneDrive\Desktop\filename.txt”
+
+
+-----------------------------------------------------------------------
+PowerShell commands to look for all hidden files
+Get-ChildItem -Path "C:\Test" -Force | Where-Object { $_.Attributes -match "Hidden" }
+
+Get-ChildItem -Force | Where-Object { $_.Attributes -match "Hidden" }                 -To look for hidden files in current folder
+
+Get-ChildItem -Path "C:\Test" -Force -Recurse | Where-Object { $_.Attributes -match "Hidden" }         -search hidden files in all subfolders
+
+command to see hidden files modified in last 8 moths, you can change number 8 in command for month you like 
+$DateLimit = (Get-Date).AddMonths(-8)
+Get-ChildItem -Path C:\ -Force -Recurse |
+  Where-Object { $_.Attributes -match "Hidden" -and $_.LastWriteTime -ge $DateLimit } 
+
+command to see hidden files modified in last 90 days, you can change number 90 in command for days you like 
+$DateLimit = (Get-Date).AddDays(-90)
+Get-ChildItem -Path C:\ -Force -Recurse |
+  Where-Object { $_.Attributes -match "Hidden" -and $_.LastWriteTime -ge $DateLimit }
+
+
+powershell command to see only system generated hidden files
+Get-ChildItem -Path C:\ -Force -Recurse |
+  Where-Object { $_.Attributes -match "Hidden" -and $_.Attributes -match "System" }
+
+powershell command to  see user generated hidden files
+Get-ChildItem -Path C:\ -Force -Recurse |
+  Where-Object { $_.Attributes -match "Hidden" -and $_.Attributes -notmatch "System" }
+
+all hidden files ever created on the system (system + user).
+Get-ChildItem -Path C:\ -Force -Recurse |
+  Where-Object { $_.Attributes -match "Hidden" }
+
+to stop it running just press
+ctrl + c
+
+
+
