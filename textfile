@@ -104,16 +104,16 @@ TO CREAT A HIDDEN FILE / ADD CONTENT TO FILE / SEE CONTENT IN FILE / REMOVE HIDD
 2-To create a file and need location of folder
                                                 [Environment]::GetFolderPath("Desktop")     -This is to filnd desktop folder you can change Desktop into your required folder name
 
-2-Hide created file
+3-Hide created file
                                     Set-ItemProperty -Path “url\filename.txt” -Name Attribute -Value Hidden
-3-Add content to hidden file 
+4-Add content to hidden file 
                                     Add-Content -Path “url\filename.txt” -Value “add text content you want in the hidden file” 
 
-4- see for hidden file
+5- see for hidden file
                                     Get-ChildItem -Path “url\filename.txt” -Force  Where-Object { $_.Attributes -math “Hidden”}
 
-5- look content inside the file
+6- look content inside the file
                                     Get-Content -Path “url\filename.txt“
 
-6-REMOVE OR DELETE FILE
+7-REMOVE OR DELETE FILE
                                     Remove -Item -Path “C:\Users\lapto\OneDrive\Desktop\filename.txt”
