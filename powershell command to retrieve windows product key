@@ -1,0 +1,37 @@
+To find  windows key just copy this script and paste this in PowerShell
+# PowerShell Script to Retrieve Windows Product Key
+
+Function Get-WindowsProductKey {
+    try {
+        # Get Digital Product ID from Registry
+        $digitalID = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").DigitalProductId
+        # Characters used in Windows product keys
+        $chars = "BCDFGHJKMPQRTVWXY2346789"
+        # Extract the relevant part of the DigitalProductId
+        $key = $digitalID[52..66]
+        # Initialize product key string
+        $productKey = ""
+        # Decode the key
+        for ($i = 24; $i -ge 0; $i--) {
+            $r = 0
+            for ($j = 14; $j -ge 0; $j--) {
+                $r = ($r * 256) -bxor $key[$j]
+                $key[$j] = [math]::Floor($r / 24)
+                $r = $r % 24
+            }
+            $productKey = $chars[$r] + $productKey
+            if (($i % 5 -eq 0) -and ($i -ne 0)) {
+                $productKey = "-" + $productKey
+            }
+        }
+
+        # Display the result
+        Write-Host "✅ Your Windows Product Key is: $productKey" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "❌ Unable to retrieve the product key. Please run PowerShell as Administrator." -ForegroundColor Red
+    }
+}
+
+# Run the function
+Get-WindowsProductKey
